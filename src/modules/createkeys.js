@@ -1,24 +1,51 @@
 import keyweb from './keyweb';
 
 const latKeys = [
+    "1","2","3","4","5","6","7","8","9","0",
     "q", "w", "e", "r", "t", "z", "u", "i", "o", "p",
     "a", "s", "d", "f", "g", "h", "j", "k", "l",
     "y", "x", "c", "v", "b", "n", "m", 
-    "shift","back","enter","space","language","shift"
+    "CapsLock","Enter"," ","Shift"
 ];
 const rusKeys = [
+    "1","2","3","4","5","6","7","8","9","0",
     "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з",
     "х", "ъ", "ф", "ы", "в", "а", "п", "р", "о","л","д",
     "ж", "э", "я", "ч", "с", "м", "и","т","ь","б","ю", 
-    "shift","back","enter","space","language","shift"
+    "CapsLock","Enter"," ","Shift"
 ];
 
-function createButton(keys) {
+function createButton(state) {
+    let noRegisterKeys;
+    if (state.isRussian) {
+        noRegisterKeys = rusKeys;
+    }
+    else {
+        noRegisterKeys = latKeys;
+    }
+
+    const keys = noRegisterKeys.map(key => {
+
+        if (state.isUpper && key.length === 1) {
+             return key.toUpperCase();
+        }
+        else if (!state.isUpper && key.length === 1){
+            return key.toLowerCase();
+        }
+        return key;
+    });
+
     return keys.map(key => {
         const keyItem = document.createElement('div');
         keyItem.classList.add('keyboard_item');
         keyItem.innerText = key;
 
+        if (key === ' ') {
+            keyItem.classList.add('special');
+            keyItem.classList.add('Space');
+
+            return keyItem;
+        }
         if (key.length === 1) {
             return keyItem;
         }
@@ -31,11 +58,11 @@ function createButton(keys) {
     });
 }
 
-function createKeyWrap(keys) {
+function createKeyWrap(state) {
     const keyboardWrap = document.createElement('div');
     keyboardWrap.classList.add('keyboard_wrap');
     
-    const keysBlock = createButton(keys);
+    const keysBlock = createButton(state);
 
     keysBlock.map(block => {
         keyboardWrap.appendChild(block);
@@ -44,7 +71,7 @@ function createKeyWrap(keys) {
     return keyboardWrap;
 }
 
-function loadButtons(currentLanguage) {
+function loadButtons(state = {isUpper: false, isRussian: false}) {
     let keyBoard = document.querySelector('.keyboard_wrap');
     if (keyBoard !== null) {
         keyBoard.parentNode.removeChild(keyBoard);
@@ -53,12 +80,8 @@ function loadButtons(currentLanguage) {
 
     const app = document.querySelector('.app_bottom');
 
-    if (currentLanguage === "rus") {
-        app.appendChild(createKeyWrap(rusKeys));
-    }
-    else {
-        app.appendChild(createKeyWrap(latKeys));
-    }
+    app.appendChild(createKeyWrap(state));
+
     keyBoard = document.querySelector('.keyboard_wrap');
     keyBoard.addEventListener('click', keyweb);
 }
