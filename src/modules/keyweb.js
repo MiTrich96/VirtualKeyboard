@@ -1,4 +1,5 @@
 import loadButtons from './createkeys';
+import searchText from './animate';
 
 let isUpper = false;
 let isRussian = false;
@@ -64,9 +65,11 @@ function writeByScreen(event) {
     let target = event.target;
 
     if (target.classList.contains('keyboard_item') && !target.classList.contains('special')) {
+        searchText(target.innerText);
         keyScreenPressed(event);
     }
     else if (target.classList.contains('special')) {
+        searchText(target.innerText);
         specialKeyPressed(event);
     }
 }

@@ -1,3 +1,5 @@
+import searchText from "./animate"
+
 function specialKeyPressed(key) {
     const textArea = document.querySelector('.output_area');
 
@@ -19,20 +21,6 @@ function specialKeyPressed(key) {
         }
     } 
 
-}
-
-function searchText(key) {
-    const textNodes = document.getElementsByClassName('keyboard_item');
-
-    for (let i = 0;i < textNodes.length;i++) {
-        if (textNodes[i].innerHTML == key) {
-            textNodes[i].classList.add('active');
-            setTimeout(() => {
-                textNodes[i].classList.remove('active');
-            }, 300);
-        }
-    }
-        
 }
 
 function writeByKeyboard(event) {
